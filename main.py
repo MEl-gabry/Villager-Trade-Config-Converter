@@ -31,12 +31,19 @@ def txt_creator(string, name):
             for trade in trades:
                 inp_match = re.search("(?<=      Item1: ).+", trade)
                 inp = trade[inp_match.span()[0] : inp_match.span()[1]]
-                inp_amount_match = re.search("(?<=      Amount1: ).+", trade)
-                inp_amount = trade[inp_amount_match.span()[0] : inp_amount_match.span()[1]]
+                inp_amount1_match = re.search("(?<=      Amount1: ).+", trade)
+                inp_amount2_match = re.search("(?<=      Amount2: ).+", trade)
+                inp2_amount = int(trade[inp_amount2_match.span()[0] : inp_amount2_match.span()[1]])
+                inp_amount = trade[inp_amount1_match.span()[0] : inp_amount1_match.span()[1]]
                 out_match = re.search("(?<=      Product: ).+", trade)
                 out = trade[out_match.span()[0] : out_match.span()[1]]
                 out_amount_match = re.search("(?<=      Amount3: ).+", trade)
                 out_amount = trade[out_amount_match.span()[0] : out_amount_match.span()[1]]
+
+                if inp2_amount != 0:
+                    inp_amount = int(inp_amount)
+                    inp_amount += inp2_amount
+
                 f.write(f"{inp} ({inp_amount})\t{out} ({out_amount})\n")
             f.write("\n")
             level += 1
